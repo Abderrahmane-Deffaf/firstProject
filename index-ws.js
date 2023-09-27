@@ -9,6 +9,10 @@ app.get('/', function(req, res) {
 server.on('request', app);
 
 process.on('SIGINT', () => {
+  wss.clients.forEach(function each(client) {
+        client.close();
+    });
+  
   server.close(() => {
     shutdownDB(); 
   });
@@ -46,11 +50,6 @@ wss.on('connection', function connection(ws) {
   });
 });
 
-/**
- * Broadcast data to all connected clients
- * @param  {Object} data
- * @void
- */
 wss.broadcast = function broadcast(data) {
   console.log('Broadcasting: ', data);
   wss.clients.forEach(function each(client) {

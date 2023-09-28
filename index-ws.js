@@ -13,9 +13,10 @@ process.on('SIGINT', () => {
         client.close();
     });
   
-  server.close(() => {
+  server.close() ; 
+  /* server.close(() => {
     shutdownDB(); 
-  });
+  }); */
 });
 
 server.listen(3000, function () { console.log('Listening on 3000'); });
@@ -31,9 +32,9 @@ wss.on('connection', function connection(ws) {
   console.log('clients connected: ', numClients);
 
   // Log number of visitors at current moment
-  db.run(`INSERT INTO visitors (count, time)
+  /* db.run(`INSERT INTO visitors (count, time)
     VALUES (${numClients}, datetime('now'))`);
-
+ */
   wss.broadcast(`Current visitors: ${numClients}`);
 
   if (ws.readyState === ws.OPEN) {
@@ -60,18 +61,18 @@ wss.broadcast = function broadcast(data) {
 
 /** Database stuff **/
 
-const sqlite3 = require('sqlite3').verbose();
+/* const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
-
+ */
 // .seralize ensures DB is set up before any queries
-db.serialize(() => {
+/* db.serialize(() => {
     db.run(`CREATE TABLE visitors (
       count INTEGER,
       time TEXT
       )`);
-});
+}); */
 
-function getCounts() {
+/* function getCounts() {
     db.each("SELECT * FROM visitors", (err, row) => {
       console.log(row);
     });
@@ -82,7 +83,7 @@ function shutdownDB() {
   console.log('shutting down DB');
   db.close();
 }
-
+ */
 
 
 /** End Database stuff **/
